@@ -1,12 +1,12 @@
-## Currency Convertor :money:
+## Currency Convertor :moneybag:
 
 Simple currency convertor app build using express, redis, axios and bulma css.
 
-## Motivation :star2:
+## Motivation :bulb:
 
 To learn Redis caching
 
-## Tech/framework used :star2:
+## Tech/framework used :computer:
 
 <b>Built with</b>
 
