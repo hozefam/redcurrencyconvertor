@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Currency Convertor</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css"
+    />
+  </head>
+  <body>
+    <div class="section">
+      <div class="container">
+        <h1 class="title">Currency Convertor</h1>
+        <p class="subtitle">
+          Get historical data about exchange rates quickly.
+        </p>
+
+        <div class="content">
+          <blockquote>
+            BASE RATE is <strong>USD</strong> GET HISTORICAL RATES FOR ANY DATE
+            SINCE 1999. THANKS TO <a href="http://fixer.io"></a>
+          </blockquote>
+        </div>
+
+        <div class="columns">
+          <form id="rateForm">
+            <div class="column">
+              <div class="field">
+                <div class="control">
+                  <input
+                    type="date"
+                    name="date"
+                    id="rateDate"
+                    class="input"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <button class="button is-primary is-stretched">
+                    Get rates
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="notification is-link is-hidden" id="visits-count"></div>
+
+        <!-- container for results -->
+        <div class="columns is-multiline is-mobile" id="results"></div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const datePicker = document.querySelector('#rateDate');
+      const form = document.querySelector('#rateForm');
+      const submitButton = document.querySelector('#rateForm button');
+
+      form.onsubmit = e => {
+        e.preventDefault();
+
+        submitButton.classList.add('is-loading');
+
+        const date = datePicker.value;
+        const url = `rate/${date}`;
+
+        axios
+          .get(url)
+          .then(response => {
+            submitButton.classList.remove('is-loading');
+            showRates(response.data.rates);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      };
+
+      function showRates(rates) {
+        let html = '';
+
+        for (rate in rates) {
+          html +=
+            '<div class="column is-one-quarter"><div class="card"><div class="card-content">';
+          html += `<p class="title">${rates[rate]}</p>
+              <p class="subtitle">${rate}</p>`;
+          html += '</div></div></div>';
+        }
+
+        document.querySelector('#results').innerHTML = html;
+      }
+
+      // IIFE - Executes on page load
+      (function() {
+        // set today's date as default date
+        datePicker.valueAsDate = new Date();
+      })();
+    </script>
+  </body>
+</html>
